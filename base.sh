@@ -62,7 +62,7 @@ listRecord() {
 
   local resourceId=$(echo "$result" | grep -Po '(?<="id":")[^"]+')
   local currentValue=$(echo "$result" | grep -Po '(?<="content":")[^"]+')
-  local proxied=$(echo "$result" | grep -Po '(?<="proxied":")[^"]+')
+  local proxied=$(echo "$result" | grep -Po '(?<="proxied":,)[^"]+')
 
   local successStat=$(echo "$result" | grep -Po '(?<="success":)[^,]+')
   if [ "$successStat" != "true" ]; then
