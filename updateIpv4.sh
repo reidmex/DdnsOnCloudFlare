@@ -31,6 +31,7 @@ if [ $? -eq 1 ]; then
   echo "listRecord failed"
   exit
 fi
+
 resourceId=$(echo "$currentStat" | sed -n '1p')
 currentValue=$(echo "$currentStat" | sed -n '2p')
 proxied=$(echo "$currentStat" | sed -n '3p')
