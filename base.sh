@@ -62,13 +62,14 @@ listRecord() {
 
   local resourceId=$(echo "$result" | grep -Po '(?<="id":")[^"]+')
   local currentValue=$(echo "$result" | grep -Po '(?<="content":")[^"]+')
+  local proxied=$(echo "$result" | grep -Po '(?<="proxied":")[^"]+')
 
   local successStat=$(echo "$result" | grep -Po '(?<="success":)[^,]+')
   if [ "$successStat" != "true" ]; then
     return 1
   fi
 
-  printf '%s\n%s' "$resourceId" "$currentValue"
+  printf '%s\n%s' "$resourceId" "$currentValue" "$proxied"
 }
 
 updateRecord() {
@@ -78,11 +79,12 @@ updateRecord() {
   local resourceId=$4
   local type=$5
   local value=$6
+  local proxied=$7
 
   local result=$(curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/$zoneId/dns_records/$resourceId" \
     -H "Authorization: Bearer $apiKey" \
     -H "Content-Type: application/json" \
-    --data "{\"type\":\"$type\",\"name\":\"$recordName\",\"content\":\"$value\",\"ttl\":600,\"proxied\":false}")
+    --data "{\"type\":\"$type\",\"name\":\"$recordName\",\"content\":\"$value\",\"ttl\":600,\"proxied\":\"$proxied\}")
 
   local successStat=$(echo "$result" | grep -Po '(?<="success":)[^,]+')
   [ "$successStat" = "true" ]
