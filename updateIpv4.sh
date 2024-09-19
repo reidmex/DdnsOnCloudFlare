@@ -32,11 +32,12 @@ if [ $? -eq 1 ]; then
   exit
 fi
 resourceId=$(echo "$currentStat" | sed -n '1p')
-
 currentValue=$(echo "$currentStat" | sed -n '2p')
+proxied=$(echo "$currentStat" | sed -n '3p')
 printf 'Get currentStat:
 resourceId=%s
-currentValue=%s\n' "$resourceId" "$currentValue"
+currentValue=%s
+proxied=%s\n' "$resourceId" "$currentValue" "$proxied"
 
 if [ -z "$resourceId" ]; then
   echo "record not exist, will create first"
@@ -55,7 +56,7 @@ if [ "$currentValue" = "$externalIpv4Add" ]; then
   exit 0
 fi
 
-updateRecord "$zoneId" "$recordName" "$apiKey" "$resourceId" "A" "$externalIpv4Add"
+updateRecord "$zoneId" "$recordName" "$apiKey" "$resourceId" "A" "$externalIpv4Add" "$proxied"
 if [ $? -eq 0 ]; then
   echo "update success"
 else
